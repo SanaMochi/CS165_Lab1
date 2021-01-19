@@ -9,18 +9,23 @@
 //moved here for convenience lol you can move it back later if you want, I just wanted to look at it all w/o switching files
 
 const char base64[] = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-static char* ret;
+//static char* ret;
 
 char* 
 to64(long v, int n) 
 {
-  char* ret;  //no actual string in c ig
-  int i;
-    for (i = 1; i < n; i++) {
-      ret += base64[v & 0x3f];
-      v >>= 6;
-    }
-  return ret;
+  static char buf[5];
+  char* s = buf;
+  
+  if(n > 4)
+    return NULL;
+  memset(buf, '\0', sizeof(buf));
+  
+  while(--n >= 0){
+    *s++ = base64[v & 0x3f];
+    v >>= 6;
+  }
+  return (buf);
 }
 
 char*
@@ -28,7 +33,7 @@ md5_crypt(const char* pw, const char* salt)
 {
   //Trying to use the hashwrapper thing given by the hashlib2plus example
   // hashwrapper *md5Wrapper = new md5wrapper();
-
+  static char ret[120];
   MD5_CTX ctx, ctx2;
   const char* magic = "$1$";
   char res[16];
@@ -145,7 +150,7 @@ md5_crypt(const char* pw, const char* salt)
   fflush(stdout);
 //  static char ret[200];
 //  char* temp = to64(((h[0] << 16) | (h[6] << 8) | (h[12])), 4);
-  strcpy(ret,to64(((h[0] << 16) | (h[6] << 8) | (h[12])), 4));//, sizeof(ret));
+  strncpy(ret,to64(((h[0] << 16) | (h[6] << 8) | (h[12])), 4), sizeof(ret));//, sizeof(ret));
   printf("wtf1\n");
   fflush(stdout);
   strcat(ret, to64(((h[1] << 16) | (h[7] << 8) | (h[13])), 4));//, sizeof(ret));
