@@ -12,29 +12,16 @@ const char base64[] = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrs
 char* 
 to64(long v, int n) 
 {
- /* char* rt;  //no actual string in c ig
-  int i;
-
-    for (i = 1; i < n; i++) {
-      rt++ = base64[v & 0x3f];
-      v >>= 6;
-    }
-  return rt;
-*/
   static char str[5];
   char* rt = str;
   int i;
 
   if(n > 4) return NULL;
-
   memset(str, '\0', sizeof(str)); // empties str
-  
-  n--;
-//  while(n >= 0){
-  for(i = 0; i <= n; i++) {
+
+  for(i = 1; i <= n; i++) {
     *rt++ = base64[v & 0x3f]; // new vals into str based on base64
     v >>= 6;
-    n--;
   }
   return (str);
 
@@ -47,7 +34,7 @@ md5_crypt(const char* pw, const char* salt)
   // hashwrapper *md5Wrapper = new md5wrapper();
   static char ret[120]; // from 6 numbers that are 20 bits long
   MD5_CTX ctx, ctx2;
-  const char* magic = "$1$";
+  static char* magic = "$1$";
   char res[16];
   char h[16];
   //strcpy(res, pw);
@@ -131,22 +118,13 @@ md5_crypt(const char* pw, const char* salt)
 //    MD5_Update(&ctx, tmp, strlen(tmp));
     MD5_Final(h, &ctx);
   }
- printf("wtf before strcpy md5\n");
- fflush(stdout);
+//  char *retr = to64(((h[0] << 16) | (h[6] << 8) | (h[12])), 4);
   strcpy(ret,to64(((h[0] << 16) | (h[6] << 8) | (h[12])), 4));//, sizeof(ret));
- printf("wtf1\n");
- fflush(stdout);
   strcat(ret, to64(((h[1] << 16) | (h[7] << 8) | (h[13])), 4));//, sizeof(ret));
- printf("wtf2\n");
- fflush(stdout);
   strcat(ret, to64(((h[2] << 16) | (h[8] << 8) | (h[14])), 4));//, sizeof(ret));
- printf("wtf3\n");
- fflush(stdout);
   strcat(ret, to64(((h[3] << 16) | (h[9] << 8) | (h[15])), 4));//, sizeof(ret));
   strcat(ret, to64(((h[4] << 16) | (h[10] << 8) | (h[5])), 4));//, sizeof(ret));
   strcat(ret, to64(h[11], 2));//, sizeof(ret));
- printf("wtf before ret\n");
- fflush(stdout);
   return ret;
 
 }
