@@ -1,3 +1,5 @@
+//Using OpenSSL, as provided by the slides
+
 #include <string.h>
 #include <stdio.h>
 //#include <md5.c>
