@@ -5,3 +5,13 @@
 Taken from Project 1 Description for CS165 (UCR)
 
 Uses OpenSSL library
+
+Note: Does not output as intended, could not debug error before deadline.
+
+Threads Used: 1
+
+CPU: Intel(R) Xeon(R) CPU E5-2670 v3 @ 2.30GHz
+
+Throughput: 0 (Did not output properly, so did not run to a conclusive end)
+
+Number of Passwords Tried: 0
